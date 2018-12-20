@@ -24,35 +24,36 @@ public class contextLearner {
 	private JFrame frame;
 	private JTextField text;
 	public static Classifier<String, String> bayes;
+  static int klassCount = 0;
 	/**
 	 * Launch the application.
 	 */
   public static void main(String[] args) {
     BayseAgent bayseAgent = new BayseAgent();
-    bayseAgent.bayes.setMemoryCapacity(90000000);
-    bayseAgent.learnByCategory("happy");
+    bayseAgent.bayes.setMemoryCapacity(99999999);
     bayseAgent.learnByCategory("abusive");
     bayseAgent.learnByCategory("sad");
+    bayseAgent.learnByCategory("happy");
     bayseAgent.learnByCategory("compliment");
     bayseAgent.learnByCategory("taunt");
 
     bayes = bayseAgent.agent();
-    
+
     /*
      * The classifier can learn from classifications that are handed over
      * to the learn methods. Imagin a tokenized text as follows. The tokens
      * are the text's features. The category of the text will either be
      * positive or negative.
      */
-    
+
     /*
      * Now that the classifier has "learned" two classifications, it will
      * be able to classify similar sentences. The classify method returns
      * a Classification Object, that contains the given featureset,
      * classification probability and resulting category.
      */
-    
-   
+
+
     final String[] unknownText1 = "".split("\\s");
     bayes.classify(Arrays.asList(unknownText1)).getCategory();
 
@@ -80,10 +81,10 @@ public class contextLearner {
 	 */
   private void initialize() {
     frame = new JFrame();
-     
+
     frame.getContentPane().setBackground(Color.PINK);
     frame.getContentPane().setLayout(null);
-    
+
     text = new JTextField("");
     text.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 16));
     text.setBackground(Color.WHITE);
@@ -98,10 +99,29 @@ public class contextLearner {
         String textToClasify = text.getText();
 //        textToClasify = textToClasify.split("\\s");
         String[] t1 = textToClasify.split("\\s");
-//         String textType = bayes.classify(Arrays.asList(t1)).getCategory();
-        
-        Collection<Classification<String, String>> textType = ((BayesClassifier<String, String>) bayes).classifyDetailed(Arrays.asList(t1));        
-        System.out.println(textType);
+        // String textType = bayes.classify(Arrays.asList(t1)).getCategory();
+
+        Collection<Classification<String, String>> textType = ((BayesClassifier<String, String>) bayes).classifyDetailed(Arrays.asList(t1));
+        float prob = 0;
+        String klass = "";
+        for (Iterator<Classification<String,String>> iterator = textType.iterator(); iterator.hasNext();) {
+//        	System.out.println("p= " + prob);
+//        	if (klassCount == 0) {
+//        		prob = iterator.next().getProbability();
+//        		klass = iterator.next().getCategory();
+//        	} else if (klassCount == 4) {
+//        		if (iterator.next().getProbability() >  prob) {
+//        			prob = iterator.next().getProbability();
+//            		klass = iterator.next().getCategory();
+//        		}
+//        	} 
+        	
+        	klassCount++;
+        	System.out.println("value= " + iterator.next());
+        	System.out.println("type= " + iterator.next());
+        	iterator.next().getCategory();
+          
+        }
         JOptionPane.showMessageDialog(frame, "'"+textToClasify +"' Is classified as:"+ textType);
       }
     });
@@ -112,20 +132,20 @@ public class contextLearner {
     });
     btnGUESS.setBounds(236, 204, 89, 23);
     frame.getContentPane().add(btnGUESS);
-    
+
     JLabel lblPleaseEnterText = new JLabel(" PLEASE ENTER TEXT");
     lblPleaseEnterText.setFont(new Font("Serif", Font.BOLD | Font.ITALIC, 12));
     lblPleaseEnterText.setBackground(Color.LIGHT_GRAY);
     lblPleaseEnterText.setBounds(23, 11, 136, 33);
     frame.getContentPane().add(lblPleaseEnterText);
-    
+
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setBounds(299, 11, 125, 109);
 		frame.getContentPane().add(btnNewButton);
 		frame.setBounds(100, 100, 450, 302);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		btnNewButton.setIcon(new ImageIcon("C:\\Users\\Mian\\Desktop\\Capture.PNG"));
-		
+
 		JButton btnClear = new JButton("CLEAR");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -136,7 +156,7 @@ public class contextLearner {
 		btnClear.setBackground(Color.LIGHT_GRAY);
 		btnClear.setBounds(335, 204, 89, 23);
 		frame.getContentPane().add(btnClear);
-		
-	
+
+
 	}
 }
